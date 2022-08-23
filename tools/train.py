@@ -118,7 +118,7 @@ def main():
     )
 
     model = torch.nn.DataParallel(model, device_ids=cfg.GPUS).cuda()
-    
+
 
     # define loss function (criterion) and optimizer
     criterion = JointsMSELoss(
@@ -209,7 +209,7 @@ def main():
             cfg, valid_loader, valid_dataset, model, criterion,
             final_output_dir, tb_log_dir, writer_dict
         )
-        
+
         lr_scheduler.step()
 
         if perf_indicator >= best_perf:

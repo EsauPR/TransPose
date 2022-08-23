@@ -19,6 +19,8 @@ from collections import OrderedDict
 import copy
 from typing import Optional, List
 
+from models import mha
+
 BN_MOMENTUM = 0.1
 logger = logging.getLogger(__name__)
 
@@ -166,7 +168,11 @@ class TransformerEncoderLayer(nn.Module):
     def __init__(self, d_model, nhead, dim_feedforward=2048, dropout=0.1,
                  activation="relu", normalize_before=False, return_atten_map=False):
         super().__init__()
-        self.self_attn = nn.MultiheadAttention(d_model, nhead, dropout=dropout)
+        # self.self_attn = nn.MultiheadAttention(d_model, nhead, dropout=dropout)
+
+        # qkv_dim = d_model // nhead
+        qkv_dim = nhead * 64
+        self.self_attn = mha.MultiheadAttention(d_model, nhead, dropout=dropout, qkv_dim=qkv_dim)
 
         self.linear1 = nn.Linear(d_model, dim_feedforward)
         self.dropout = nn.Dropout(dropout)
